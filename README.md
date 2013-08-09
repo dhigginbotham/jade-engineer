@@ -1,5 +1,4 @@
-<img src="https://drone.io/github.com/dhigginbotham/jade-engineer/status.png" style="float: right;" />
-## Jade Engineer
+## Jade Engineer <img src="https://drone.io/github.com/dhigginbotham/jade-engineer/status.png" align="right" />
 The purpose of this module is to render `big` / `small` / `micro` views on the server side with jade from an object/json. This is helpful if you have big datasets and need to render massive tables. I got something like 300,000 rows to give me a headache, but that was due to a client browser issue, by that time the middleware had long rendered the html.
 
 
