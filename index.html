@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Jade Engineer by dhigginbotham</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  </head>
+  <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/dhigginbotham/jade-engineer">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/dhigginbotham/jade-engineer/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/dhigginbotham/jade-engineer/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
+
+    <div class="wrapper">
+
+      <section>
+        <div id="title">
+          <h1>Jade Engineer</h1>
+          <p>render html inside a middleware from json to pass to your view on the server side</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/dhigginbotham">dhigginbotham</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
+
+        <h2>
+<a name="jade-engineer-" class="anchor" href="#jade-engineer-"><span class="octicon octicon-link"></span></a>Jade Engineer <img src="https://drone.io/github.com/dhigginbotham/jade-engineer/status.png" align="right">
+</h2>
+
+<p>The purpose of this module is to render <code>big</code> / <code>small</code> / <code>micro</code> views on the server side with jade from an object/json. This is helpful if you have big datasets and need to render massive tables. I got something like 300,000 rows to give me a headache, but that was due to a client browser issue, by that time the middleware had long rendered the html.</p>
+
+<h3>
+<a name="options" class="anchor" href="#options"><span class="octicon octicon-link"></span></a>Options</h3>
+
+<table>
+<thead><tr>
+<th>Key</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr>
+<td><code>template</code></td>
+<td>you can swap out jade files to run your own views, however i will most likely be adding many views overtime as this is a pretty common use case in my world.</td>
+</tr>
+<tr>
+<td><code>pretty</code></td>
+<td>jade supports <code>pretty</code> &amp; <code>ugly</code> html, i passed this through as it's probably nice to have access to.</td>
+</tr>
+<tr>
+<td><code>fields</code></td>
+<td>array objects of <code>key</code>, <code>title</code> for which fields to load in for templating.</td>
+</tr>
+<tr>
+<td><code>data</code></td>
+<td>json/object to give to jade, usually a db.find or some json from an api, file, etc..</td>
+</tr>
+</tbody>
+</table><h3>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h3>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'http'</span><span class="p">).</span><span class="nx">createServer</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
+
+<span class="c1">// include some data, an easy replacement would be</span>
+<span class="c1">// to grab this from mongodb or something similar.</span>
+<span class="kd">var</span> <span class="nx">data</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./data.json'</span><span class="p">);</span>
+
+<span class="c1">// require jade-engineer</span>
+<span class="kd">var</span> <span class="nx">engineer</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'../lib'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'path'</span><span class="p">);</span>
+
+<span class="c1">//1337 port is 1337</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'port'</span><span class="p">,</span> <span class="mi">1337</span><span class="p">);</span>
+
+<span class="c1">// set our view and view engine</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'views'</span><span class="p">,</span> <span class="nx">path</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">__dirname</span><span class="p">,</span> <span class="s1">'views'</span><span class="p">));</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">set</span><span class="p">(</span><span class="s1">'view engine'</span><span class="p">,</span> <span class="s1">'jade'</span><span class="p">);</span>
+
+<span class="kd">var</span> <span class="nx">exampleOptions</span> <span class="o">=</span> <span class="p">{</span>
+  <span class="nx">fields</span><span class="o">:</span> <span class="p">[</span>
+    <span class="p">{</span><span class="nx">key</span><span class="o">:</span> <span class="s1">'name'</span><span class="p">,</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">'Name'</span><span class="p">},</span>
+    <span class="p">{</span><span class="nx">key</span><span class="o">:</span> <span class="s1">'phone'</span><span class="p">,</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">'Phone'</span><span class="p">},</span>
+    <span class="p">{</span><span class="nx">key</span><span class="o">:</span> <span class="s1">'date'</span><span class="p">,</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">'Date'</span><span class="p">},</span>
+    <span class="p">{</span><span class="nx">key</span><span class="o">:</span> <span class="s1">'email'</span><span class="p">,</span> <span class="nx">title</span><span class="o">:</span> <span class="s1">'Email Address'</span><span class="p">}</span>
+  <span class="p">]</span>
+<span class="p">};</span>
+
+<span class="c1">// make an example out of this middleware ;)</span>
+<span class="kd">var</span> <span class="nx">exampleMiddle</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="c1">// create new engineer object</span>
+  <span class="kd">var</span> <span class="nx">example</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">engineer</span><span class="p">();</span>
+
+  <span class="c1">// get the start time</span>
+  <span class="kd">var</span> <span class="nx">startMs</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">();</span>
+
+  <span class="c1">// running .make gives us some html to do with as we wish</span>
+  <span class="nx">example</span><span class="p">.</span><span class="nx">make</span><span class="p">(</span><span class="nx">exampleOptions</span><span class="p">,</span> <span class="nx">data</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">html</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+
+      <span class="k">return</span> <span class="nx">next</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">html</span><span class="p">)</span> <span class="p">{</span>
+
+      <span class="c1">// set `res.locals.table`</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">locals</span><span class="p">.</span><span class="nx">table</span> <span class="o">=</span> <span class="nx">html</span><span class="p">;</span>
+
+      <span class="c1">// store end time to get our speed test.</span>
+      <span class="kd">var</span> <span class="nx">endMs</span> <span class="o">=</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">();</span>
+
+      <span class="c1">// find out how long it took...</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'It took '</span> <span class="o">+</span> <span class="p">(</span><span class="nx">endMs</span> <span class="o">-</span> <span class="nx">startMs</span><span class="p">)</span> <span class="o">+</span> <span class="s1">'ms to render '</span> <span class="o">+</span> <span class="nx">data</span><span class="p">.</span><span class="nx">length</span> <span class="o">+</span> <span class="s1">' rows.'</span><span class="p">);</span>
+
+      <span class="k">return</span> <span class="nx">next</span><span class="p">();</span>
+
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+
+      <span class="c1">// using this pattern allows you to handle not having</span>
+      <span class="c1">// any html to return, and no error. Probably because you're</span>
+      <span class="c1">// missing something in your chain.</span>
+
+      <span class="k">return</span> <span class="nx">next</span><span class="p">();</span>
+
+    <span class="p">}</span>
+
+  <span class="p">});</span>
+
+<span class="p">};</span>
+
+<span class="kd">var</span> <span class="nx">exampleRoute</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="c1">// return res.render with our example.jade file</span>
+  <span class="k">return</span> <span class="nx">res</span><span class="p">.</span><span class="nx">render</span><span class="p">(</span><span class="s1">'example'</span><span class="p">);</span>
+
+<span class="p">};</span>
+
+<span class="c1">// set app.get w/ some middleware and a route</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="nx">exampleMiddle</span><span class="p">,</span> <span class="nx">exampleRoute</span><span class="p">);</span>
+
+<span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'port'</span><span class="p">),</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'jade-engineer example running on port %s'</span><span class="p">,</span> <span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'port'</span><span class="p">));</span>
+<span class="p">});</span>
+</pre></div>
+
+<h3>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h3>
+
+<div class="highlight"><pre><span class="nx">The</span> <span class="nx">MIT</span> <span class="nx">License</span> <span class="p">(</span><span class="nx">MIT</span><span class="p">)</span>
+
+<span class="nx">Copyright</span> <span class="p">(</span><span class="nx">c</span><span class="p">)</span> <span class="mi">2013</span> <span class="nx">David</span> <span class="nx">Higginbotham</span> 
+
+<span class="nx">Permission</span> <span class="nx">is</span> <span class="nx">hereby</span> <span class="nx">granted</span><span class="p">,</span> <span class="nx">free</span> <span class="nx">of</span> <span class="nx">charge</span><span class="p">,</span> <span class="nx">to</span> <span class="nx">any</span> <span class="nx">person</span> <span class="nx">obtaining</span> <span class="nx">a</span> <span class="nx">copy</span>
+<span class="nx">of</span> <span class="k">this</span> <span class="nx">software</span> <span class="nx">and</span> <span class="nx">associated</span> <span class="nx">documentation</span> <span class="nx">files</span> <span class="p">(</span><span class="nx">the</span> <span class="s2">"Software"</span><span class="p">),</span> <span class="nx">to</span> <span class="nx">deal</span>
+<span class="k">in</span> <span class="nx">the</span> <span class="nx">Software</span> <span class="nx">without</span> <span class="nx">restriction</span><span class="p">,</span> <span class="nx">including</span> <span class="nx">without</span> <span class="nx">limitation</span> <span class="nx">the</span> <span class="nx">rights</span>
+<span class="nx">to</span> <span class="nx">use</span><span class="p">,</span> <span class="nx">copy</span><span class="p">,</span> <span class="nx">modify</span><span class="p">,</span> <span class="nx">merge</span><span class="p">,</span> <span class="nx">publish</span><span class="p">,</span> <span class="nx">distribute</span><span class="p">,</span> <span class="nx">sublicense</span><span class="p">,</span> <span class="nx">and</span><span class="o">/</span><span class="nx">or</span> <span class="nx">sell</span>
+<span class="nx">copies</span> <span class="nx">of</span> <span class="nx">the</span> <span class="nx">Software</span><span class="p">,</span> <span class="nx">and</span> <span class="nx">to</span> <span class="nx">permit</span> <span class="nx">persons</span> <span class="nx">to</span> <span class="nx">whom</span> <span class="nx">the</span> <span class="nx">Software</span> <span class="nx">is</span>
+<span class="nx">furnished</span> <span class="nx">to</span> <span class="k">do</span> <span class="nx">so</span><span class="p">,</span> <span class="nx">subject</span> <span class="nx">to</span> <span class="nx">the</span> <span class="nx">following</span> <span class="nx">conditions</span><span class="o">:</span>
+
+<span class="nx">The</span> <span class="nx">above</span> <span class="nx">copyright</span> <span class="nx">notice</span> <span class="nx">and</span> <span class="k">this</span> <span class="nx">permission</span> <span class="nx">notice</span> <span class="nx">shall</span> <span class="nx">be</span> <span class="nx">included</span> <span class="k">in</span>
+<span class="nx">all</span> <span class="nx">copies</span> <span class="nx">or</span> <span class="nx">substantial</span> <span class="nx">portions</span> <span class="nx">of</span> <span class="nx">the</span> <span class="nx">Software</span><span class="p">.</span>
+
+<span class="nx">THE</span> <span class="nx">SOFTWARE</span> <span class="nx">IS</span> <span class="nx">PROVIDED</span> <span class="s2">"AS IS"</span><span class="p">,</span> <span class="nx">WITHOUT</span> <span class="nx">WARRANTY</span> <span class="nx">OF</span> <span class="nx">ANY</span> <span class="nx">KIND</span><span class="p">,</span> <span class="nx">EXPRESS</span> <span class="nx">OR</span>
+<span class="nx">IMPLIED</span><span class="p">,</span> <span class="nx">INCLUDING</span> <span class="nx">BUT</span> <span class="nx">NOT</span> <span class="nx">LIMITED</span> <span class="nx">TO</span> <span class="nx">THE</span> <span class="nx">WARRANTIES</span> <span class="nx">OF</span> <span class="nx">MERCHANTABILITY</span><span class="p">,</span>
+<span class="nx">FITNESS</span> <span class="nx">FOR</span> <span class="nx">A</span> <span class="nx">PARTICULAR</span> <span class="nx">PURPOSE</span> <span class="nx">AND</span> <span class="nx">NONINFRINGEMENT</span><span class="p">.</span> <span class="nx">IN</span> <span class="nx">NO</span> <span class="nx">EVENT</span> <span class="nx">SHALL</span> <span class="nx">THE</span>
+<span class="nx">AUTHORS</span> <span class="nx">OR</span> <span class="nx">COPYRIGHT</span> <span class="nx">HOLDERS</span> <span class="nx">BE</span> <span class="nx">LIABLE</span> <span class="nx">FOR</span> <span class="nx">ANY</span> <span class="nx">CLAIM</span><span class="p">,</span> <span class="nx">DAMAGES</span> <span class="nx">OR</span> <span class="nx">OTHER</span>
+<span class="nx">LIABILITY</span><span class="p">,</span> <span class="nx">WHETHER</span> <span class="nx">IN</span> <span class="nx">AN</span> <span class="nx">ACTION</span> <span class="nx">OF</span> <span class="nx">CONTRACT</span><span class="p">,</span> <span class="nx">TORT</span> <span class="nx">OR</span> <span class="nx">OTHERWISE</span><span class="p">,</span> <span class="nx">ARISING</span> <span class="nx">FROM</span><span class="p">,</span>
+<span class="nx">OUT</span> <span class="nx">OF</span> <span class="nx">OR</span> <span class="nx">IN</span> <span class="nx">CONNECTION</span> <span class="nx">WITH</span> <span class="nx">THE</span> <span class="nx">SOFTWARE</span> <span class="nx">OR</span> <span class="nx">THE</span> <span class="nx">USE</span> <span class="nx">OR</span> <span class="nx">OTHER</span> <span class="nx">DEALINGS</span> <span class="nx">IN</span>
+<span class="nx">THE</span> <span class="nx">SOFTWARE</span><span class="p">.</span>
+</pre></div>
+      </section>
+
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+    
+  </body>
+</html>
