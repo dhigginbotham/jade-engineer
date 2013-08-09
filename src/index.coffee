@@ -27,8 +27,12 @@ engineer = (opts) ->
 
 engineer::make = (opts, input, fn) ->
 
-  # define input - json/object tree
-  @input = input
+  if _.isFunction(input) == true
+    fn = input
+    input = []
+
+  # # define input - json/object tree
+  # @input = input
 
   # refactor to support array of objects so sorting
   # is much easier.
@@ -44,6 +48,7 @@ engineer::make = (opts, input, fn) ->
   if @fields.length > 0
     @keys = _.pluck @fields, "key"
     @titles = _.pluck @fields, "title"
+    delete @fields
   else return fn "You must pass an array of objects in your options for fields", null
 
   self = @
@@ -53,9 +58,11 @@ engineer::make = (opts, input, fn) ->
   # render some htmlz
   fs.exists self.template, (exists) ->
 
-    if exists then jade.renderFile self.template, {engine: self, data: self.input, pretty: self.pretty}, (err, html) ->
+    if exists then jade.renderFile self.template, {engine: self, data: input, pretty: self.pretty}, (err, html) ->
 
       return if err? then fn err, null
+
+      console.log self
 
       fn null, html
 

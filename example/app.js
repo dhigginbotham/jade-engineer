@@ -5,7 +5,7 @@ var server = require('http').createServer(app);
 
 // include some data, an easy replacement would be
 // to grab this from mongodb or something similar.
-var data = require('./data.json');
+var data = require('./data17k.json');
 
 // require jade-engineer
 var engineer = require('../lib');
