@@ -3,10 +3,11 @@ The purpose of this module is to render `big` / `small` / `micro` views on the s
 
 ### Options
 Key | Description
+--- | ---
 `template` | you can swap out jade files to run your own views, however i will most likely be adding many views overtime as this is a pretty common use case in my world.
 `pretty` | jade supports `pretty` & `ugly` html, i passed this through as it's probably nice to have access to.
 `fields` | array objects of `key`, `title` for which fields to load in for templating.
-`data` | some json/object to view through.
+`data` | json/object to give to jade, usually a db.find or some json from an api, file, etc..
 
 ### Usage
 ````js
