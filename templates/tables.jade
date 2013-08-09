@@ -1,0 +1,26 @@
+if (engine && data)
+    table.table.table-striped
+      thead
+        tr
+          th #
+          for title in engine.titles
+            th=title
+          if (engine.manage)
+            th(style="text-align:center;") Manage
+      tbody
+        for fields, index in data
+          tr
+            th=index + 1
+            for key in engine.keys
+              - if (key == engine.link.key)
+                td: a(href=engine.link.prefix + "/" + fields[engine.link.href])=fields[key]
+              - else
+                td=fields[key]
+            if (engine.manage)
+              td(style="text-align:center;")
+                for manage in engine.manage
+                  a(href=manage.prefix + "/" + fields[manage.href], class=manage.classes) #{manage.title}
+                  | &nbsp;
+
+else
+  p Error rendering view.
