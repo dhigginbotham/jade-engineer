@@ -1,7 +1,14 @@
 {
   "name": "jade-engineer",
-  "description": "render views w/ jade on the server side as middleware for connect or express",
   "version": "0.0.1",
+  "description": "render views w/ jade on the server side as middleware for connect or express",
+  "private": false,
+  "keywords": [
+    "jade",
+    "html2json",
+    "server side",
+    "middleware"
+  ],
   "main": "lib/index.js",
   "author": {
     "name": "David Higginbotham",
@@ -22,5 +29,12 @@
   "scripts": {
     "test": "mocha test/engineer.js -R spec -t 2000"
   },
-  "bugs": "https://github.com/dhigginbotham/jade-engineer/issues"
+  "bugs": {
+    "url": "https://github.com/dhigginbotham/jade-engineer/issues",
+    "email": "davehigginbotham@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:dhigginbotham/jade-engineer.git"
+  }  
 }
