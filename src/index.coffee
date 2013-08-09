@@ -62,8 +62,6 @@ engineer::make = (opts, input, fn) ->
 
       return if err? then fn err, null
 
-      console.log self
-
       fn null, html
 
     else fn "You must provide a valid .jade file to render from", null
