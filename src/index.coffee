@@ -61,5 +61,4 @@ engineer::make = (opts, input, fn) ->
 
     else fn "You must provide a valid .jade file to render from", null
 
-
 module.exports = engineer
