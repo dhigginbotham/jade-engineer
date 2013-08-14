@@ -1,7 +1,7 @@
 {
   "name": "jade-engineer",
   "description": "render views w/ jade on the server side as middleware for connect or express",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "lib/index.js",
   "author": {
     "name": "David Higginbotham",
